@@ -44,6 +44,16 @@ ExecuteDsl
 
 ## diesel::drop [3535083226] ##
 ```
+
+AS PER MY UNDERSTANDING: ONE OF THE REASONS "another command is already in progress" BEING
+THROWN IS THAT WHEN WE DON'T CLEAR CONNECTION BY REPEATEDLY GETTING RESULTS TILL WE GET NULL.
+I ADDED CODE TO PERFORM THE SAME RIGHT BEFORE WE CALL `PQsendQueryPrepared` AND FOLLOWING
+CODE WILL START WORKING AS IT IS.
+SEE, https://github.com/heyrutvik/diesel/commit/1a8e2d84a672d3d8f5bee4a217cbc896314950e8#diff-d909dcd86a6b0f5a6c0a11dd876d0fa30e4b2baf340398847141b9e2b160599eR84
+```
+// UNCOMMENT FOLLOWING LINE TO GET IT WORKING!
+// while self.get_next_result()?.is_some() {}
+``` IN diesel/src/pg/connection/raw.rs FILE.
 */
 
 fn main() {
